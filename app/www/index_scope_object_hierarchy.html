@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<style>
+
+			div {
+				border:2px solid blue;
+				margin:5px;
+				padding:5px;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			{{$id}}<br>
+			Root Message: {{message}}<br>
+			Root Message: <input ng-model="message">
+			<div ng-controller="MyCtrl">
+				{{$id}}
+				<div ng-controller="MyCtrl">
+					{{$id}}
+				</div>
+				<div ng-controller="MyCtrl">
+					{{$id}}
+				</div>
+			</div>
+			<div ng-controller="MyCtrl">
+				{{$id}}
+				<div ng-controller="MyCtrl">
+					{{$id}}
+				</div>
+				<div ng-controller="MyCtrl">
+					{{$id}}
+					<div ng-controller="MyCtrl">
+						{{$id}}
+						{{message}}
+					</div>
+					<div ng-controller="MyCtrl">
+						{{$id}}
+					</div>
+				</div>
+			</div>
+			<div ng-controller="MyCtrl">
+				{{$id}}
+			</div>
+		</div>
+		<script>
+
+			var x=0;
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+					console.log("controller: " + (x++));
+
+					$scope.$watch(function() {
+						console.log("digesting " + $scope.$id);
+
+						var  x = 100000000;
+						while(x--) { }
+
+
+					});
+				})
+				.run(function($rootScope, $timeout) {
+
+					$rootScope.$watch(function() {
+						console.log("digesting " + $rootScope.$id);
+
+						var  x = 100000000;
+						while(x--) { }
+					});
+
+					$timeout(function() {
+						console.dir($rootScope)
+						$rootScope.message = "Hi Class!";
+					},2000);
+				});
+
+		</script>
+	</body>
+</html>

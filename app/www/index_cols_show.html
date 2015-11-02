@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<input ng-model="showMe" type="checkbox">
+				<div ng-show="showMe">You can see me! Albania Rocks!</div>
+
+				<table>
+					<tr>
+						<th ng-repeat="col in cols" ng-show="showCols[col]">{{col}}</th>
+					</tr>
+					<tr ng-repeat="row in rows">
+						<td ng-repeat="col in cols" ng-show="showCols[col]">{{row[col]}}</td>
+					</tr>
+				</table>
+				<input ng-repeat-start="col in cols"
+					type="checkbox" ng-model="showCols[col]">
+					{{col}}<br ng-repeat-end>
+
+			</div>
+		</div>
+		<script>
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+					$scope.cols = ["col1", "col2", "col3"];
+					$scope.showCols = {};
+					$scope.rows = [
+						{ col1: 1, col2: 2, col3: 3 },
+						{ col1: 'A', col2: 'B', col3: 'C' }
+					];
+				});
+		</script>
+	</body>
+</html>

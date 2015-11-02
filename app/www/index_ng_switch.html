@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<select ng-model="selectedClub"
+					ng-options="club.code as club.name group by club.region for club in clubs">
+					<option value="">Select One...</option>
+				</select>
+
+				<div ng-switch on="selectedClub">
+					<div ng-switch-when="014">
+						Auto Club South
+					</div>
+					<div ng-switch-when="212">
+						Auto Club Mid-Atlantic
+					</div>
+					<div ng-switch-when="260">
+						Auto Club Washington
+					</div>
+					<div ng-switch-when="285">
+						Auto Club Quebec
+					</div>
+					<div ng-switch-default>
+						Select One
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+
+					$scope.clubs = [
+						{code: "014", name: "Auto Club South", region: "South" },
+						{code: "212", name: "Auto Club Mid-Atlantic", region: "South" },
+						{code: "260", name: "Auto Club Washington", region: "North" },
+						{code: "285", name: "Auto Club Quebec", region: "North" }
+					];
+
+				});
+
+		</script>
+	</body>
+</html>
