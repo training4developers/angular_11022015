@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="LeftCtrl">
+				<input ng-model="message">
+			</div>
+			<div ng-controller="RightCtrl">
+				{{message}}
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.factory("EventChannel", function() {
+
+					var events = {};
+
+					return {
+						trigger: function(eventName, eventData) {
+							if (!events[eventName]) {
+								return;
+							}
+							events[eventName].forEach(function(fn) {
+								fn(eventData);
+							});
+						},
+						on: function(eventName, callbackFn) {
+							if (!events[eventName]) {
+								events[eventName] = [];
+							}
+							events[eventName].push(callbackFn);
+						}
+					};
+
+				})
+				.controller("LeftCtrl", function($scope, EventChannel) {
+
+					$scope.$watch("message", function(newValue) {
+						EventChannel.trigger("new_message", newValue);
+					});
+
+				})
+				.controller("RightCtrl", function($scope, EventChannel) {
+
+					EventChannel.on("new_message", function(newValue) {
+						$scope.message = newValue;
+					});
+
+				});
+
+		</script>
+	</body>
+</html>

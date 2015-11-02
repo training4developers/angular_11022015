@@ -1,0 +1,23 @@
+{
+  "name": "angular_11022015",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Eric W. Greene <eric@training4developers.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/training4developers/angular_11022015",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/www/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angular": "~1.4.7"
+  }
+}

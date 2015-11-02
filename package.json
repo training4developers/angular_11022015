@@ -1,0 +1,25 @@
+{
+  "name": "angular_11022015",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/training4developers/angular_11022015.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/training4developers/angular_11022015/issues"
+  },
+  "homepage": "https://github.com/training4developers/angular_11022015#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}

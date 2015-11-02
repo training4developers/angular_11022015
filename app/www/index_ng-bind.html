@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<style>
+
+			.ng-scope {
+				border: 2px solid red;
+				margin:5px;
+				padding:5px;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+				<span ng-bind="message"></span>
+			</div>
+			<div ng-controller="MyCtrl">
+				{{message}}
+				<span ng-bind="message"></span>
+			</div>
+			<div ng-controller="MyCtrl">
+				{{message}}
+				<span ng-bind="message"></span>
+			</div>
+			<div ng-controller="MyCtrl">
+				{{message}}
+				<span ng-bind="message"></span>
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hello World!";
+				});
+
+		</script>
+	</body>
+</html>

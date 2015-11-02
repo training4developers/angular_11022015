@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div id="my-app">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hello World!";
+				});
+
+			$(function() {
+
+				// other initialization code
+				angular.bootstrap($("#my-app"), ["MyApp"]);
+
+			});
+
+		</script>
+	</body>
+</html>

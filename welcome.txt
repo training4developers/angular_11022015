@@ -1,0 +1,18 @@
+Welcome to Comprehensive Angular.js!
+
+Instructor: Eric Greene
+
+Class Demos:
+https://github.com/training4developers/angular_11022015
+
+Schedule:
+
+Monday - Friday: 9am to 5pm
+
+Breaks:
+	Morning: 10:25am to 10:35am
+	Lunch: Noon to 1pm
+	Afternoon #1: 2:15pm to 2:25pm
+	Afternoon #2: 3:40pm to 3:50pm
+
+Class Introductions...
