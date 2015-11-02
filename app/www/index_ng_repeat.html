@@ -11,8 +11,9 @@
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
 
+				Color Filter: <input ng-model="colorFilter">
 				<ul>
-					<li ng-repeat="color in colors">{{$index}} {{color}} {{$odd}}</li>
+					<li ng-repeat="color in colors | filter:colorFilter">{{$index}} {{color}} {{$odd}}</li>
 				</ul>
 
 				<ul>
@@ -27,7 +28,7 @@
 				.controller("MyCtrl", function($scope) {
 
 					$scope.colors = ["black", "red", "white",
-						"blue", "green", "yellow"];
+						"blue", "green", "yellow", "brown", "purple", "orange"];
 
 					$scope.cars = [
 						{ make: "Skoda", model: "Rapid", color: "blue" },

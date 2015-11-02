@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				Color Filter: <input ng-model="colorFilter"><br>
+				New Color: <input ng-model="newColor">
+				<button onclick="addColor()">Add Color</button>
+				<ul>
+					<li ng-repeat="color in colors | filter:colorFilter | orderBy:'toString()' track by $index">{{$index}} {{color}} {{$odd}}</li>
+				</ul>
+
+				<div>
+					<div>
+						Make: <input ng-model="newMake">
+					</div>
+					<div>
+						Model: <input ng-model="newModel">
+					</div>
+					<div>
+						Color: <input ng-model="newColor">
+					</div>
+					<button ng-click="addCar()">Add Car</button>
+				</div>
+
+				<ul>
+					<li ng-repeat="car in cars | filter:{'make':makeFilter} | orderBy:'model'">{{car.make}} {{car.model}} {{car.color}}</li>
+				</ul>
+
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+
+					$scope.colors = ["black", "red", "white", "purple",
+						"blue", "green", "yellow", "brown", "purple", "orange"];
+
+					$scope.cars = [
+						{ make: "Skoda", model: "Rapid", color: "blue" },
+						{ make: "BMW", model: "Mini Cooper", color: "red" },
+						{ make: "Honda", model: "Accord", color: "black" },
+						{ make: "Audi", model: "A3", color: "blue" }
+					];
+
+					window.addColor = function() {
+						$scope.colors.push($scope.newColor);
+						$scope.$digest();
+						console.log($scope.colors);
+					};
+
+					$scope.addCar = function() {
+						$scope.cars.push({
+							make: $scope.newMake,
+							model: $scope.newModel,
+							color: $scope.newColor
+						});
+
+						$scope.cars;
+					}
+
+					console.dir($rootScope);
+
+				});
+
+		</script>
+	</body>
+</html>
