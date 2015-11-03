@@ -9,18 +9,54 @@
 
 	<body>
 		<div ng-app="MyApp">
-			Parent Message: {{obj.message}}<br>
-			Parent Message: <input ng-model="obj.message">
 			<div ng-controller="MyCtrl">
-				Child Message: {{obj.message}}<br>
-				Child Message: <input ng-model="obj.message">
+				{{message}}
 			</div>
 		</div>
 		<script>
 
-			angular.module("MyApp", [])
-				.controller("MyCtrl", function($scope, $rootScope) {
-					$rootScope.obj = {};
+			angular.module("MyApp.Constants", [])
+				.constant("HeaderText", { message: "Welcome to AAA!" })
+				.value("SomeOtherInfo", "AAA Rocks!")
+				.config(function() {
+					console.log("MyApp.Constants Config");
+				})
+				.run(function() {
+					console.log("MyApp.Constants Run");
+				});
+
+			angular.module("MyApp.Controllers", ["MyApp.Constants"])
+				.controller("MyCtrl", function($scope, HeaderText) {
+					$scope.message = HeaderText.message;
+					console.log("Ran MyCtrl");
+				})
+				.config(function() {
+					console.log("MyApp.Controllers Config");
+				})
+				.run(function() {
+					console.log("MyApp.Controllers Run");
+				});
+
+
+			angular.module("MyApp.Controllers2", ["MyApp.Constants"])
+				.controller("MyCtrl2", function($scope, SomeOtherInfo) {
+					$scope.message = SomeOtherInfo;
+					console.log("Ran MyCtrl2");
+				})
+				.config(function() {
+					console.log("MyApp.Controllers2 Config");
+				})
+				.run(function() {
+					console.log("MyApp.Controllers2 Run");
+				});
+
+
+			angular.module("MyApp", ["MyApp.Controllers","MyApp.Controllers2"])
+				.config(function() {
+					console.log("MyApp Config");
+				})
+				.run(function() {
+					console.log("MyApp Run");
 				});
 
 		</script>

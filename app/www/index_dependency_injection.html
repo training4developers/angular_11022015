@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+		<script>
+
+			myCtrl.$inject = ["$log", "$scope"];
+
+			function myCtrl($log, $scope) {
+					$scope.message = "Hi Class!";
+					$log.log("some info");
+			}
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", myCtrl);
+
+		</script>
+	</body>
+</html>
