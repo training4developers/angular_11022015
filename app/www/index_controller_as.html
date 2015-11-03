@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="FirstCtrl as ctrl1">
+				<div ng-controller="SecondCtrl as ctrl2">
+					<div ng-controller="ThirdCtrl as ctrl3">
+						First: {{ctrl1.message}}
+						Second: {{ctrl2.message}}
+						Third: {{ctrl3.message}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("FirstCtrl", function($scope) {
+					this.message = "First";
+				})
+				.controller("SecondCtrl", function($scope) {
+					this.message = "Second";
+				})
+				.controller("ThirdCtrl", function($scope) {
+					this.message = "Third";
+				})
+				.run(function($timeout, $rootScope) {
+
+					$timeout(function() {
+						console.log($rootScope);
+					}, 1000);
+
+				});
+
+		</script>
+	</body>
+</html>
