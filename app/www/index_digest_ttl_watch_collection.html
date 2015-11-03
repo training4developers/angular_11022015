@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<!--<script src="/libs/jquery/dist/jquery.js"></script>-->
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<ul>
+					<li ng-repeat="color in colors">{{color}}</li>
+				</ul>
+
+				<input ng-model="message">
+
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.config(function($rootScopeProvider) {
+					$rootScopeProvider.digestTtl(5);
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+
+					$scope.colors = ["black","red","green","yellow","white","blue"];
+
+					$scope.$watchCollection("colors", function(newList, oldList) {
+
+						if (newList.indexOf("saffron") > -1) {
+							console.log("Go India!");
+						}
+
+					});
+
+					$scope.$watch("message", function(newValue, oldValue) {
+						$scope.message += "!";
+					});
+
+					$timeout(function() {
+						$scope.colors.push("saffron");
+					}, 1000);
+
+				});
+
+		</script>
+	</body>
+</html>

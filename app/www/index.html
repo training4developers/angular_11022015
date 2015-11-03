@@ -3,134 +3,65 @@
 <html>
 	<head>
 		<title>Angular.js Class</title>
-		<script src="/libs/jquery/dist/jquery.js"></script>
+		<!--<script src="/libs/jquery/dist/jquery.js"></script>-->
 		<script src="/libs/angular/angular.js"></script>
-		<style>
-
-			input.ng-touched.ng-invalid {
-				border: 2px red solid;
-			}
-
-		</style>
 	</head>
 
 	<body>
+
 		<div ng-app="MyApp">
-			<div ng-controller="MyCtrl">
-				<form name="otherForm" novalidate ng-submit="submitContact()">
-					<div>
-						<label>First Name
-							<input type="text" name="contactFirstName" ng-model="contact.firstName" aaa-required>
-						</label>
-						<span ng-show="otherForm.contactFirstName.$touched && otherForm.contactFirstName.$error.required">Please enter a first name!</span>
-					</div>
-					<div>
-						<label>Last Name
-							<input type="text" name="contactLastName" ng-model="contact.lastName" aaa-required>
-						</label>
-					</div>
-					<div>
-						<label>Age
-							<input type="number" name="contactAge" ng-model="contact.age" aaa-required>
-						</label>
-					</div>
-					<div>
-						<label>Email
-							<input type="email" name="contactEmail" ng-model="contact.email">
-						</label>
-					</div>
-					<div>
-						<label>AAA Member
-							<input type="checkbox" name="contactAAAMember" ng-model="contact.aaaMember">
-						</label>
-					</div>
-					<div>
-						<fieldset>
-							<legend>Membership Type</legend>
-							<div>
-								<label>Individual
-									<input type="radio" name="contactMembershipType"
-										ng-model="contact.membershipType" value="i">
-								</label>
-							</div>
-							<div>
-								<label>Family
-									<input type="radio" name="contactMembershipType"
-										ng-model="contact.membershipType" value="f">
-								</label>
-							</div>
-						</fieldset>
-					</div>
-					<div>
-						<label>Club:
-							<select ng-model="contact.club" name="contactClub"
-								ng-options="club.code as club.name group by club.region
-									for club in clubs">
-								<option value="">Select One...</option>
-							</select>
-						</label>
-					</div>
-					<div>
-						<label>Comments:
-							<textarea ng-model="contact.comments" name="contactComments"]
-								rows="5" cols="40" aaa-min-length="20"></textarea>
-						</label>
-					</div>
-					<button type="button" ng-click="submitContact()">Submit</button>
-				</form>
+			<div ng-controller="FirstCtrl">
+				<div ng-controller="FourthCtrl">
+				</div>
+				<div ng-controller="FifthCtrl">
+				</div>
+			</div>
+			<div ng-controller="SecondCtrl">
+			</div>
+			<div ng-controller="ThirdCtrl">
 			</div>
 		</div>
 		<script>
 
 			angular.module("MyApp", [])
-				.directive("aaaRequired", function() {
-					return {
-						require: "ngModel",
-						link: function(scope, element, attrs, ctrl) {
-							function validate(value) {
-								if (value == null || String(value).length === 0) {
-									ctrl.$setValidity("aaa-required", false);
-									return;
-								} else {
-									ctrl.$setValidity("aaa-required", true);
-									return value;
-								}
-							}
-							ctrl.$formatters.push(validate);
-							ctrl.$parsers.push(validate);
-						}
-					};
-				})
-				.directive("aaaMinLength", function() {
-					return {
-						require: "ngModel",
-						link: function(scope, element, attrs, ctrl) {
-							function validate(value) {
-								if (value == null || String(value).length < parseInt(attrs.aaaMinLength)) {
-									ctrl.$setValidity("aaa-min-length", false);
-									return;
-								} else {
-									ctrl.$setValidity("aaa-min-length", true);
-									return value;
-								}
-							}
-							ctrl.$formatters.push(validate);
-							ctrl.$parsers.push(validate);
-						}
-					};
-				})
-				.controller("MyCtrl", function($scope) {
+				.controller("FirstCtrl", function($scope, $timeout) {
 
-						$scope.clubs = [
-							{code: "014", name: "Auto Club South", region: "South" },
-							{code: "212", name: "Auto Club Mid-Atlantic", region: "South" },
-							{code: "260", name: "Auto Club Washington", region: "North" },
-							{code: "285", name: "Auto Club Quebec", region: "North" }
-						];
 
-						$scope.submitContact = function() {
-							console.dir($scope);
-						};
+				})
+				.controller("SecondCtrl", function($scope, $timeout) {
+					$scope.$on("go_home1", function(e, data) {
+						console.log("2nd " + data.message);
+					});
+
+				})
+				.controller("ThirdCtrl", function($scope, $timeout) {
+
+					$scope.$on("go_home1", function(e, data) {
+						console.log("3rd " + data.message);
+					});
+
+				})
+				.controller("FourthCtrl", function($scope, $timeout) {
+
+				})
+				.controller("FifthCtrl", function($scope, $timeout) {
+
+
+					$timeout(function() {
+
+						$scope.$emit("go_home", {
+							message: "time to go home.."
+						});
+					}, 0);
+
+				})
+				.run(function($rootScope) {
+
+					$rootScope.$on("go_home", function(e, data) {
+						console.log(data.message);
+						$rootScope.$broadcast("go_home1", data);
+					});
+
 				});
 
 		</script>

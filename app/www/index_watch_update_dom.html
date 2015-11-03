@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<!--<script src="/libs/jquery/dist/jquery.js"></script>-->
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<input ng-model="message">
+
+				<div>{{message}}</div>
+				<section id="some-message"></section>
+
+
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $document) {
+
+					console.dir($document);
+
+					$scope.$watch("message", function(newValue, oldValue) {
+						console.log("new value: " + newValue);
+						console.log("old value: " + oldValue);
+
+						$document.find = function(selector) {
+							return document.querySelectorAll(selector);
+						};
+
+						$document.find("#some-message")[0].innerText = newValue;
+					});
+
+
+				});
+
+		</script>
+	</body>
+</html>
