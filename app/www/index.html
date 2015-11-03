@@ -3,62 +3,20 @@
 <html>
 	<head>
 		<title>Angular.js Class</title>
-		<script src="/libs/jquery/dist/jquery.js"></script>
-		<script src="/libs/angular/angular.js"></script>
+
 	</head>
 
 	<body>
-		<div ng-app="MyApp">
-			<div ng-controller="MyCtrl">
-				{{message}}
-			</div>
+		<div ng-controller="MyCtrl">
+			{{message}}
 		</div>
-		<script>
-
-			angular.module("MyApp.Constants", [])
-				.constant("HeaderText", { message: "Welcome to AAA!" })
-				.value("SomeOtherInfo", "AAA Rocks!")
-				.config(function() {
-					console.log("MyApp.Constants Config");
-				})
-				.run(function() {
-					console.log("MyApp.Constants Run");
-				});
-
-			angular.module("MyApp.Controllers", ["MyApp.Constants"])
-				.controller("MyCtrl", function($scope, HeaderText) {
-					$scope.message = HeaderText.message;
-					console.log("Ran MyCtrl");
-				})
-				.config(function() {
-					console.log("MyApp.Controllers Config");
-				})
-				.run(function() {
-					console.log("MyApp.Controllers Run");
-				});
-
-
-			angular.module("MyApp.Controllers2", ["MyApp.Constants"])
-				.controller("MyCtrl2", function($scope, SomeOtherInfo) {
-					$scope.message = SomeOtherInfo;
-					console.log("Ran MyCtrl2");
-				})
-				.config(function() {
-					console.log("MyApp.Controllers2 Config");
-				})
-				.run(function() {
-					console.log("MyApp.Controllers2 Run");
-				});
-
-
-			angular.module("MyApp", ["MyApp.Controllers","MyApp.Controllers2"])
-				.config(function() {
-					console.log("MyApp Config");
-				})
-				.run(function() {
-					console.log("MyApp Run");
-				});
-
-		</script>
+		<!-- <script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/app.constants.js"></script>
+		<script src="js/checkin/controllers/myctrl.js"></script>
+		<script src="js/reservations/controllers/myctrl2.js"></script>
+		<script src="js/app_init.js"></script> -->
+		<script src="js/site.min.gz.js?v={{version}}"></script>
 	</body>
 </html>
