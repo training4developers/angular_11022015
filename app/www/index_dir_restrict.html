@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir></div>
+			</div>
+		</div>
+
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+
+					return {
+						restrict: "EAC",
+						link: function(scope, element, attrs) {
+							element.html("Hi Mikel!");
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+				});
+
+		</script>
+	</body>
+</html>

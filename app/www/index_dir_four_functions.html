@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir></div>
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+
+					// directive definition object
+					return {
+						// compile function
+						compile: function(tElement, tAttrs) {
+
+							tElement.append("<span>compile: {{message}}</span>")
+
+							return {
+								// pre-link function
+								pre: function(scope, element, attrs) {
+
+								},
+								// post-link function
+								post: function(scope, element, attrs) {
+									//element.html("Hi Class!");
+									element.append("<span>post-link: {{message}}</span>");
+									scope.message = "Hi Ty!";
+								}
+							};
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+				});
+
+				// simplest directive with a post-link
+				// .directive("myDir", function() {
+				//
+				// 	// post-link function
+				// 	return function(scope, element, attrs) {
+				// 		element.html("Hi Class!");
+				// 	};
+				//
+				// })
+
+				// next level of complexity, using a DDO and link option
+				// .directive("myDir", function() {
+				//
+				// 	// directive definition object
+				// 	return {
+				// 		// post link function
+				// 		link: function(scope, element, attrs) {
+				// 			element.html("Hi Class!");
+				// 		}
+				// 	};
+				//
+				// })
+
+				// use a compile function for template editing
+				// .directive("myDir", function() {
+				//
+				// 	// directive definition object
+				// 	return {
+				// 		// compile function
+				// 		compile: function(tElement, tAttrs) {
+				//
+				// 			tElement.append("<span>compile: {{message}}</span>")
+				//
+				// 			// post link function
+				// 			return function(scope, element, attrs) {
+				// 				//element.html("Hi Class!");
+				// 				element.append("<span>post-link: {{message}}</span>");
+				// 				scope.message = "Hi Ty!";
+				// 			};
+				// 		}
+				// 	};
+				//
+				// })
+
+
+		</script>
+	</body>
+</html>
