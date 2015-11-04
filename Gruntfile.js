@@ -6,12 +6,22 @@ module.exports = function(grunt) {
 		path = require("path"),
 		wwwFolder = path.join("app", "www"),
 
+		cssFolder = path.join(wwwFolder, "css"),
+		cssMinFiles = {},
+		cssCompressFiles = {},
+
 		libsFolder = path.join(wwwFolder, "libs"),
 		jsFolder = path.join(wwwFolder, "js"),
 
 		jsFiles = {},
 		jsMinifyFiles = {},
 		jsCompressFiles = {};
+
+	cssMinFiles[path.join(cssFolder, "/site.min.css")] =
+		path.join(cssFolder, "/site.css");
+
+	cssCompressFiles[path.join(cssFolder, "/site.min.gz.css")] =
+		path.join(cssFolder, "/site.min.css");
 
 	jsFiles[path.join(jsFolder, "site.js")]	= [
 			path.join(libsFolder, "jquery", "dist", "jquery.js"),
@@ -33,6 +43,15 @@ module.exports = function(grunt) {
 		webServer: {
 			port: 8080,
 			rootFolder: "app/www"
+		},
+		cssmin: {
+			main: {
+        options: {
+          keepSpecialComments: 0,
+          sourceMap: false
+        },
+				files: cssMinFiles
+			}
 		},
 		uglify: {
 			combine: {
@@ -62,6 +81,12 @@ module.exports = function(grunt) {
       }
 		},
     compress: {
+      css: {
+        options: {
+          mode: 'gzip'
+        },
+        files: cssCompressFiles
+      },
       js: {
         options: {
           mode: 'gzip'
@@ -70,6 +95,10 @@ module.exports = function(grunt) {
       }
     },
 		watch: {
+      css: {
+				files: path.join(cssFolder, "**", "*.css"),
+				tasks: ["cssmin","compress:css"]
+			},
 			js: {
 				files: [
 					path.join(jsFolder, "**", "*.js"),
@@ -80,6 +109,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-uglify");
+	grunt.loadNpmTasks("grunt-contrib-cssmin");
 	grunt.loadNpmTasks("grunt-contrib-compress");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 
@@ -94,6 +124,15 @@ module.exports = function(grunt) {
 			webServerConfig = grunt.config("webServer");
 
 		//this.async();
+
+		app.use("/css", express.static(cssFolder, {
+			setHeaders: function(res, filePath) {
+				res.setHeader("Content-Type", "text/css");
+				if (/.gz.css$/.test(filePath)) {
+					res.setHeader("Content-Encoding", "gzip");
+				}
+			}
+		}));
 
 		app.use("/js", express.static(jsFolder, {
 			setHeaders: function(res, filePath) {
@@ -114,6 +153,6 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask("default", "standard dev task",
-		["uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
+		["cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
 
 };
