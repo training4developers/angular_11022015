@@ -6,9 +6,11 @@ module.exports = function(grunt) {
 		path = require("path"),
 		wwwFolder = path.join("app", "www"),
 
+		sassFolder = path.join("assets", "sass"),
 		cssFolder = path.join(wwwFolder, "css"),
 		cssMinFiles = {},
 		cssCompressFiles = {},
+		sassFiles = {},
 
 		libsFolder = path.join(wwwFolder, "libs"),
 		jsFolder = path.join(wwwFolder, "js"),
@@ -16,6 +18,9 @@ module.exports = function(grunt) {
 		jsFiles = {},
 		jsMinifyFiles = {},
 		jsCompressFiles = {};
+
+	sassFiles[path.join(cssFolder, "site.css")] =
+		path.join(sassFolder, "site.scss");
 
 	cssMinFiles[path.join(cssFolder, "/site.min.css")] =
 		path.join(cssFolder, "/site.css");
@@ -43,6 +48,14 @@ module.exports = function(grunt) {
 		webServer: {
 			port: 8080,
 			rootFolder: "app/www"
+		},
+    sass: {
+			main: {
+        options: {
+          sourcemap: "none"
+        },
+				files: sassFiles
+			}
 		},
 		cssmin: {
 			main: {
@@ -96,8 +109,8 @@ module.exports = function(grunt) {
     },
 		watch: {
       css: {
-				files: path.join(cssFolder, "**", "*.css"),
-				tasks: ["cssmin","compress:css"]
+				files: path.join(sassFolder, "site.scss"),
+				tasks: ["sass","cssmin","compress:css"]
 			},
 			js: {
 				files: [
@@ -110,6 +123,7 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-cssmin");
+	grunt.loadNpmTasks("grunt-contrib-sass");
 	grunt.loadNpmTasks("grunt-contrib-compress");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 
@@ -153,6 +167,6 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask("default", "standard dev task",
-		["cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
+		["sass", "cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
 
 };
