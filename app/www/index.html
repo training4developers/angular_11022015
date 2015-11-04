@@ -3,65 +3,20 @@
 <html>
 	<head>
 		<title>Angular.js Class</title>
-		<!--<script src="/libs/jquery/dist/jquery.js"></script>-->
+		<script src="/libs/jquery/dist/jquery.js"></script>
 		<script src="/libs/angular/angular.js"></script>
 	</head>
 
 	<body>
 
 		<div ng-app="MyApp">
-			<div ng-controller="FirstCtrl">
-				<div ng-controller="FourthCtrl">
-				</div>
-				<div ng-controller="FifthCtrl">
-				</div>
-			</div>
-			<div ng-controller="SecondCtrl">
-			</div>
-			<div ng-controller="ThirdCtrl">
+			<div ng-controller="MyCtrl">
 			</div>
 		</div>
 		<script>
 
 			angular.module("MyApp", [])
-				.controller("FirstCtrl", function($scope, $timeout) {
-
-
-				})
-				.controller("SecondCtrl", function($scope, $timeout) {
-					$scope.$on("go_home1", function(e, data) {
-						console.log("2nd " + data.message);
-					});
-
-				})
-				.controller("ThirdCtrl", function($scope, $timeout) {
-
-					$scope.$on("go_home1", function(e, data) {
-						console.log("3rd " + data.message);
-					});
-
-				})
-				.controller("FourthCtrl", function($scope, $timeout) {
-
-				})
-				.controller("FifthCtrl", function($scope, $timeout) {
-
-
-					$timeout(function() {
-
-						$scope.$emit("go_home", {
-							message: "time to go home.."
-						});
-					}, 0);
-
-				})
-				.run(function($rootScope) {
-
-					$rootScope.$on("go_home", function(e, data) {
-						console.log(data.message);
-						$rootScope.$broadcast("go_home1", data);
-					});
-
+				.controller("MyCtrl", function($scope) {
 				});
 
 		</script>
