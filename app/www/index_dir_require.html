@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div wife-dir>
+					<div husband-dir>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.directive("wifeDir", function() {
+
+					return {
+						// iphone
+						controller: function() {
+
+							this.sendTextMessage = function(msg) {
+								console.log(msg);
+							};
+
+						}
+					};
+
+				})
+				.directive("husbandDir", function() {
+
+					return {
+						require: "?^wifeDir",
+						link: function(scope, element, attrs, ctrl) {
+							if (ctrl) {
+								ctrl.sendTextMessage("hi honey! hope you had a great day!");
+							}
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+
+				});
+
+		</script>
+	</body>
+</html>

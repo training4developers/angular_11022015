@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				Outside: {{message}}
+				<div my-alert
+					two-way="message"
+					one-way="{{message | uppercase}}"
+					func="doSomething(myVar)"></div>
+				<button ng-click="doSomething($event)">Click Me Too!</button>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.directive("myAlert", function() {
+
+					var someVar = "AAA Rocks!";
+
+					return {
+						scope: {
+							// name of scope prop: name of attribute on element
+							twoWay: "=",
+							oneWay: "@",
+							clickMe: "&func"
+						},
+						template: `
+
+<h1>${someVar}</h1>Inside Two-Way: {{twoWay}}<br>
+Inside One-Way: {{oneWay}}<br>
+Inside: <input ng-model='twoWay'><br>
+<button>Click Me!</button>
+
+`,
+						link: function(scope, element, attrs) {
+
+							function clickMe() {
+								scope.clickMe({ myVar: "Bob" });
+							}
+
+							element.find("button").on("click", clickMe);
+
+							scope.$on("$destroy", function() {
+								element.find("button").off("click", clickMe);
+							});
+
+							// one possible solution
+							// element.find("button").on("click", function() {
+							// 	scope.clickMe();
+							// });
+							//
+							// scope.$on("$destroy", function() {
+							// 	element.find("button").off("click");
+							// });
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+
+					$scope.message = "Hi Mark!";
+
+					$scope.doSomething = function(param) {
+						console.log("did it! " + param);
+					};
+
+					$timeout(function() {
+						$scope.message = "Bye Mark!";
+					}, 1000);
+
+				});
+
+		</script>
+	</body>
+</html>
