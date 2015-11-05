@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message | aaaUpperCase | aaaStrToAppend:'!!!!!!!'}}
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.filter("aaaUpperCase", function() {
+
+					return function(value) {
+						return String(value).toUpperCase();
+					};
+
+				})
+				.filter("aaaStrToAppend", function() {
+
+					return function(value, strToAppend) {
+						return String(value) + String(strToAppend);
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Everyone loves AAA";
+				});
+
+		</script>
+	</body>
+</html>

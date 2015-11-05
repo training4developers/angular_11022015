@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div second-dir="5" first-dir>
+					<div third-dir></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.directive("secondDir", function($compile) {
+
+					return {
+						priority:100,
+						terminal: true,
+						controller: function() {
+								console.log("secondDir controller");
+						},
+						compile: function(tElement, tAttrs) {
+							console.log("secondDir compile");
+
+							var tpl = tElement[0].outerHTML;
+							var pri = this.priority;
+							var parentElement = tElement.parent();
+							parentElement.empty();
+
+							return {
+								pre: function(scope, element, attrs) {
+									console.log("secondDir pre-link");
+								},
+								post: function(scope, element, attrs) {
+									console.log("secondDir post-link");
+
+									var count = parseInt(attrs.secondDir, 10);
+
+									for (var x=0; x<count; x++) {
+										var linkingFn = $compile(tpl, null, pri);
+										var domElements = linkingFn(scope);
+										element.append(domElements);
+									}
+
+
+
+								}
+							};
+						}
+					};
+
+				})
+				.directive("thirdDir", function($compile) {
+
+					return {
+						controller: function() {
+								console.log("thirdDir controller");
+						},
+						compile: function(tElement, tAttrs) {
+							console.log("thirdDir compile");
+							return {
+								pre: function(scope, element, attrs) {
+									console.log("thirdDir pre-link");
+								},
+								post: function(scope, element, attrs) {
+									console.log("thirdDir post-link");
+								}
+							};
+						}
+					};
+
+				})
+				.directive("firstDir", function() {
+
+					return {
+						//require: "secondDir",
+						priority:30,
+						controller: function() {
+								console.log("firstDir controller");
+						},
+						compile: function(tElement, tAttrs) {
+							console.log("firstDir compile");
+							return {
+								pre: function(scope, element, attrs) {
+									console.log("firstDir pre-link");
+								},
+								post: function(scope, element, attrs) {
+									console.log("firstDir post-link");
+								}
+							};
+						}
+
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+
+				});
+
+		</script>
+	</body>
+</html>

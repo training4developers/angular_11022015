@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div simple-bold simple-repeat="5">{{message}}</div>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.directive("simpleBold", function() {
+					return {
+					    priority:500,
+					    link: function(scope, element) {
+					        console.log("simpleBold Link");
+					        element.css("font-weight", "bold");
+					    }
+					};
+				})
+				.directive("simpleRepeat", function($compile) {
+					return {
+						priority: 100,
+						terminal: true,
+						compile: function(tElement, tAttrs) {
+
+							var
+								that = this,
+								count = parseInt(tAttrs.simpleRepeat, 10),
+								tpl = tElement[0].outerHTML,
+								parentElement = tElement.parent();
+
+							parentElement.empty();
+
+							return function(scope) {
+
+								while (count--) {
+									parentElement.append($compile(tpl, null, that.priority)(scope.$new()))
+								}
+							};
+						}
+					};
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Mirdita!!!!";
+				});
+
+		</script>
+	</body>
+</html>

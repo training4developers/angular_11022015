@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				Current Value: {{currentValue}}
+				<div observe-exercise="{{currentValue}}"></div>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.directive("observeExercise", function() {
+
+					return {
+				    template: "Observe Value: {{observeValue}}",
+				    scope: {
+				        theValue: "@observeExercise"
+				    },
+				    link: function(scope, element, attrs) {
+
+								attrs.$observe("observeExercise", function(newValue) {
+									scope.observeValue = newValue;
+								});
+				    }
+					};
+
+				})
+				.controller("MyCtrl", function($scope, $interval, $timeout) {
+					$scope.currentValue = 0;
+
+					var intervalPromise = $interval(function() {
+					    $scope.currentValue++;
+					}, 500);
+
+					$timeout(function() {
+					    $interval.cancel(intervalPromise);
+					}, 5000);
+
+
+				});
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<input ng-model="message">
+				<div my-dir msg="{{message}}"></div>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+
+					return {
+						link: function(scope, element, attrs) {
+							console.dir(attrs);
+							console.log(attrs.$normalize("ty-jayson"));
+
+							attrs.$observe("msg", function(newValue) {
+								console.log(newValue);
+							});
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Mirdita!!!!";
+
+
+				});
+
+		</script>
+	</body>
+</html>
