@@ -10,37 +10,32 @@
 	<body>
 
 		<div ng-app="MyApp">
-			<script type="text/ng-template" id="test.html">
-				<span>{{message}}</span>
-			</script>
 			<div ng-controller="MyCtrl">
-				<div ng-include="'/partials/test.html'"></div>
-				<div my-dir>Test</div>
+				{{message}}
+				<div my-alert="message"></div>
 			</div>
 		</div>
-
 
 		<script>
 
 			angular.module("MyApp", [])
-				.directive("myDir", function() {
+				.directive("myAlert", function() {
 
 					return {
-						// template: function(tElement, tAttrs) {
-						// 	tElement.append("<span>{{message}}</span>");
-						// },
-						// template: "<span>{{message}}</span>",
-						templateUrl: "/partials/test.html",
-						link: function(scope, element, attrs) {
-							scope.message = "Peter Rocks!";
-						}
-					};
+						scope: {
+							msg: "=myAlert"
+						},
+						template: "<h1>{{msg}}</h1><input ng-model='msg'>"
+					}
 
 				})
-				.controller("MyCtrl", function($scope) {
-				})
-				.run(function($templateCache) {
-					$templateCache.put("/partials/test.html", "<span>{{message}}</span>");
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.message = "Hi Mark!";
+
+					$timeout(function() {
+						$scope.message = "Bye Mark!";
+					}, 1000);
+
 				});
 
 		</script>

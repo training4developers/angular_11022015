@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir>
+					<span>{{message}}</span>
+				</div>
+			</div>
+		</div>
+
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+
+					return {
+						transclude: true,
+						//template: "Lorem ipsum <div ng-transclude></div><div ng-transclude></div><div ng-transclude></div><div ng-transclude></div><div ng-transclude></div> ullamco",
+						link: function(scope, element, attrs, ctrl, transclude) {
+
+							transclude(function(clone) {
+								clone.wrap("<b></b>");
+								element.append(clone.parent());
+							});
+							transclude(function(clone) {
+								element.append(clone);
+							});
+							transclude(function(clone) {
+								element.append(clone);
+							});
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "foo";
+				});
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<ul>
+					<li>First One</li>
+					<li aaa-repeat="team in footballTeams | orderBy:'name'">
+						{{$index}} {{team.name | uppercase}} - {{team.qb}} {{$even}}
+					</li>
+					<li aaa-repeat="color in colors | orderBy:'toString()'">{{color}}</li>
+					<li>Last One</li>
+				</ul>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("aaaRepeat", function() {
+
+					return {
+						transclude: 'element',
+						link: function(scope, element, attrs, ctrl, transclude) {
+
+								var exp = attrs.aaaRepeat;
+								var tokens = exp.split(" ");
+								var itemName = tokens[0];
+								var itemListName = tokens[2];
+								var itemListExp = tokens.slice(2).join(" ");
+								//var childScopes = [];
+								var clones = [];
+
+								scope.$watchCollection(itemListName, function(newList, oldList, watchScope) {
+
+									clones.forEach(function(clone) {
+										clone.scope().$destroy();
+										clone.remove();
+									});
+									clones = [];
+
+									// childScopes.forEach(function(scope) {
+									// 	scope.$destroy();
+									// });
+									// childScopes = [];
+
+									watchScope.$eval(itemListExp).forEach(function(item, index, list) {
+										var childScope = scope.$new();
+										childScope[itemName] = item;
+										childScope["$index"] = index;
+										childScope["$first"] = index === 0;
+										childScope["$last"] = index === (list.length-1);
+										childScope["$middle"] = (index > 0) && (index < (list.length-1));
+										childScope["$even"] = index % 2 === 0;
+										childScope["$odd"] = index % 2 !== 0;
+										transclude(childScope, function(clone) {
+											// to do
+											element.after(clone);
+											clones.push(clone);
+										});
+										//childScopes.push(childScope);
+									});
+
+								});
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.colors = ["red","black","green","blue","white","purple","purple","purple","purple"];
+
+					$scope.footballTeams = [
+						{ name: "Broncos", qb: "Manning" },
+						{ name: "Packers", qb: "Rogers" },
+						{ name: "Team Albania", qb: "Mikel" },
+						{ name: "Giants", qb: "Manning" }
+					];
+
+					$timeout(function() {
+						$scope.colors.push("fuschia");
+
+						$scope.footballTeams.push({
+							name: "Montreal Canadiens",
+							qb: "Mike"
+						});
+
+						console.log("timeout expired");
+					}, 100);
+
+				});
+
+		</script>
+	</body>
+</html>

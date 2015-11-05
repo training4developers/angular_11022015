@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div aaa-repeat="team in footballTeams | orderBy:'name'">
+					<h1>{{team.name | uppercase}} - {{team.qb}}</h1>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("aaaRepeat", function() {
+
+					return {
+						transclude: true,
+						link: function(scope, element, attrs, ctrl, transclude) {
+
+								var exp = attrs.aaaRepeat;
+								var tokens = exp.split(" ");
+								var itemName = tokens[0];
+								var itemListName = tokens[2];
+								var itemListExp = tokens.slice(2).join(" ");
+								var childScopes = [];
+
+								scope.$watchCollection(itemListName, function(newList, oldList, watchScope) {
+
+									element.empty();
+
+									childScopes.forEach(function(scope) {
+										scope.$destroy();
+									});
+									childScopes = [];
+
+									watchScope.$eval(itemListExp).forEach(function(item) {
+										var childScope = scope.$new();
+										childScope[itemName] = item;
+										transclude(childScope, function(clone) {
+											element.append(clone);
+										});
+										childScopes.push(childScope);
+									});
+
+								});
+
+
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.colors = ["red","black","green","blue","white"];
+
+					$scope.footballTeams = [
+						{ name: "Broncos", qb: "Manning" },
+						{ name: "Packers", qb: "Rogers" },
+						{ name: "Team Albania", qb: "Mikel" },
+						{ name: "Giants", qb: "Manning" }
+					];
+
+					$timeout(function() {
+						$scope.colors.push("fuschia");
+						console.log("timeout expired");
+					}, 10000);
+
+				});
+
+		</script>
+	</body>
+</html>
