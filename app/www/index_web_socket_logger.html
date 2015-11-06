@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/q/q.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.factory("WebSocketLogger", function() {
+
+					var ws;
+
+					function connectToWebSocketServer() {
+						var d = Q.defer();
+						ws = new WebSocket("ws://localhost:8080");
+						ws.addEventListener("open", function() {
+							d.resolve();
+						});
+						return d.promise;
+					}
+
+					var p = connectToWebSocketServer();
+
+					return {
+						log: function(msg) {
+							p.then(function() {
+								ws.send(msg);
+							});
+
+						}
+					};
+
+				})
+				.config(function($provide) {
+
+					$provide.decorator("$log", function($delegate, WebSocketLogger) {
+						var originalLog = $delegate.log;
+						$delegate.log = function(msg) {
+							WebSocketLogger.log(msg);
+							originalLog(msg);
+						};
+						return $delegate;
+					});
+
+				})
+				.controller("MyCtrl", function($timeout, $interval, $log) {
+
+					//WebSocketLogger.log("test message");
+
+					var i = $interval(function() {
+						$log.log("logging a message");
+					}, 500);
+
+					$timeout(function() {
+						$interval.cancel(i);
+					}, 10000);
+
+				});
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/js/app.templates.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.provider("Logger", function() {
+					var prefix = "";
+					return {
+						setPrefix: function(newPrefix) {
+							prefix = newPrefix;
+						},
+						// factory
+						$get: function($log) {
+							return {
+								log: function(msg) {
+									$log.log(prefix + " " + msg);
+								}
+							};
+						}
+					};
+				})
+				.config(function(LoggerProvider) {
+					LoggerProvider.setPrefix("AAA>");
+				})
+				.controller("MyCtrl", function($scope, Logger) {
+					Logger.log("some message");
+				});
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/js/app.templates.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.config(function($provide) {
+					$provide.decorator("$log", function($delegate) {
+
+						var originalLog = $delegate.log;
+
+						$delegate.log = function(message) {
+							originalLog("MyApp> " + message);
+						};
+
+						return $delegate;
+
+					});
+				})
+				.controller("MyCtrl", function($scope, $log) {
+					$log.log("some message");
+				});
+
+		</script>
+	</body>
+</html>

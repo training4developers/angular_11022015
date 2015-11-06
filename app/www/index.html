@@ -21,13 +21,70 @@
 			"use strict";
 
 			angular.module("MyApp", ['MyApp.Templates'])
-				.controller("MyCtrl", function($scope, $http) {
+				.constant("BaseRESTURL", "http://localhost:8090")
+				.factory("Widgets", function($http, BaseRESTURL) {
+
+					return {
+						getAll: function() {
+							return $http.get(BaseRESTURL + "/widgets");
+						},
+						get: function(widgetId) {
+							return $http.get(BaseRESTURL + "/widgets/" + encodeURIComponent(widgetId));
+						},
+						insert: function(widget) {
+							return $http.post(BaseRESTURL + "/widgets", widget);
+						},
+						update: function(widget) {
+							return $http.put(BaseRESTURL + "/widgets/" + encodeURIComponent(widget._id), widget);
+						},
+						delete: function(widgetId) {
+							return $http.delete(BaseRESTURL + "/widgets/" + encodeURIComponent(widgetId));
+						}
+					}
+
+				})
+				.controller("MyCtrl", function($scope, Widgets, $http) {
 					$scope.message = "Test Message!";
 
-					$http.get("http://localhost:8090/widgets").then(function(results) {
-						console.log("done");
+					// Widgets.getAll().then(function(results) {
+					// 	console.log(results.data);
+					// });
+
+					var widget = {
+						name: "Tiny Red Widget",
+						description: "A tiny red widget",
+						color: "red",
+						size: "tiny",
+						quantity: 12
+					};
+
+					// Widgets.insert(widget).then(function() {
+					// 	return Widgets.getAll();
+					// }).then(function(results) {
+					// 	console.log(results.data);
+					// });
+
+					// Widgets.get("563d0bd5fb7f24bc2693b98f").then(function(results) {
+					// 	results.data.quantity = 24;
+					// 	return Widgets.update(results.data);
+					// }).then(function(results) {
+					// 	return Widgets.getAll();
+					// }).then(function(results) {
+					// 	console.log(results.data);
+					// }).catch(function(results) {
+					// 	console.log("sorry an error occurred");
+					// });
+
+					Widgets.delete("563d0bd5fb7f24bc2693b98f").then(function(results) {
+						return Widgets.getAll();
+					}).then(function(results) {
 						console.log(results);
 					});
+
+					// $http.get("http://localhost:8090/widgets").then(function(results) {
+					// 	console.log("done");
+					// 	console.log(results);
+					// });
 
 					// $http.jsonp("http://localhost:8090/widgets?callback=JSON_CALLBACK").then(function(results) {
 					// 	console.log("done");

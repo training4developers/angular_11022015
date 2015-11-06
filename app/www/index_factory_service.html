@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/js/app.templates.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			function EmployeeSvc() {
+
+			}
+
+			EmployeeSvc.prototype.doSomething = function() {
+				console.log("I did it!");
+			};
+
+			angular.module("MyApp", [])
+				.factory("FirstSvc", function($log) {
+
+					return {
+						doSomething: function() {
+							$log.log("I did it!");
+						}
+					};
+				})
+				.service("FirstSvc2", function() {
+
+					this.doSomething = function() {
+						console.log("I did it too!");
+					};
+				})
+				.controller("MyCtrl", function($scope, FirstSvc, FirstSvc2) {
+					FirstSvc.doSomething();
+					FirstSvc2.doSomething();
+				})
+				.controller("MyCtrl2", function($scope, FirstSvc, FirstSvc2) {
+					FirstSvc.doSomething();
+					FirstSvc2.doSomething();
+				});
+
+		</script>
+	</body>
+</html>

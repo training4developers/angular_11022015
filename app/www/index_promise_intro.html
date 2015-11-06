@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Angular.js Class</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/js/app.templates.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($q) {
+
+					var fastFoodAssemblyWorker = $q.defer();
+
+					var customer = fastFoodAssemblyWorker.promise;
+
+					customer.then(function(results) {
+						console.log("eat food... " + results);
+					}).catch(function(result) {
+						console.log("ask for a refund...");
+					});
+
+					setTimeout(function() {
+						fastFoodAssemblyWorker.resolve("big mac attack!");
+						console.log("food is ready!");
+					}, 2000);
+					console.log("waiting for our food...");
+
+				});
+
+		</script>
+	</body>
+</html>
