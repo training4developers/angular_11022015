@@ -5,15 +5,14 @@
 		<title>Angular.js Class</title>
 		<script src="/libs/jquery/dist/jquery.js"></script>
 		<script src="/libs/angular/angular.js"></script>
+		<script src="/js/app.templates.js"></script>
 	</head>
 
 	<body>
 
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				<ul>
-					<li ng-repeat="num in numbers | gte:20">{{num}}</li>
-				</ul>
+				<div ng-include="'test.tpl.html'"></div>
 			</div>
 		</div>
 
@@ -21,24 +20,9 @@
 
 			"use strict";
 
-			angular.module("MyApp", [])
-				.filter("gte", function() {
-
-					return function(listOfValues, minValue) {
-
-						return listOfValues.filter(function(num) {
-							return num > minValue;
-						});
-
-					};
-
-				})
-				.controller("MyCtrl", function($scope, $filter) {
-
-					$scope.numbers = [56,34,76,12,4,-8,23,71,32,100,15];
-
-					console.log($filter("uppercase")("Almost time to go home!"));
-
+			angular.module("MyApp", ['MyApp.Templates'])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Test Message!";
 				});
 
 		</script>

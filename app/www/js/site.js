@@ -33160,6 +33160,11 @@ is set to `true`. The parse error is stored in `ngModel.$error.parse`.
   }).constant("SomeOtherInfo", "AAA Rocks!");
 })(jQuery, angular);
 
+angular.module("MyApp.Templates", []).run([ "$templateCache", function($templateCache) {
+  "use strict";
+  $templateCache.put("test.tpl.html", "<h1>{{message}}</h1>");
+} ]);
+
 (function($, angular) {
   ctrl.$inject = [ "$scope", "HeaderText", "$log" ];
   function ctrl($scope, HeaderText, $log) {

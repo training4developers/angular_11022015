@@ -6,6 +6,7 @@ module.exports = function(grunt) {
 		path = require("path"),
 		wwwFolder = path.join("app", "www"),
 
+		tplsFolder = path.join("assets", "tpls"),
 		sassFolder = path.join("assets", "sass"),
 		cssFolder = path.join(wwwFolder, "css"),
 		cssMinFiles = {},
@@ -33,6 +34,7 @@ module.exports = function(grunt) {
 			path.join(libsFolder, "angular", "angular.js"),
 			path.join(jsFolder, "app.js"),
 			path.join(jsFolder, "app.constants.js"),
+			path.join(jsFolder, "app.templates.js"),
 			path.join(jsFolder, "checkin", "controllers", "*.js"),
 			path.join(jsFolder, "reservations", "controllers", "*.js"),
 			path.join(jsFolder, "app_init.js")
@@ -49,6 +51,30 @@ module.exports = function(grunt) {
 			port: 8080,
 			rootFolder: "app/www"
 		},
+		html2js: {
+    	main: {
+	    	options: {
+					useStrict: true,
+					module: "MyApp.Templates",
+					htmlmin: {
+				    collapseBooleanAttributes: true,
+				    collapseWhitespace: true,
+				    removeAttributeQuotes: true,
+				    removeComments: true,
+				    removeEmptyAttributes: true,
+				    removeRedundantAttributes: true,
+				    removeScriptTypeAttributes: true,
+				    removeStyleLinkTypeAttributes: true
+				  },
+					singleModule: true,
+					rename: function (moduleName) {
+						return moduleName.slice(moduleName.lastIndexOf("/") + 1);
+					}
+	    	},
+      	src: ['assets/**/*.tpl.html'],
+      	dest: 'app/www/js/app.templates.js'
+    	}
+  	},
     sass: {
 			main: {
         options: {
@@ -108,6 +134,10 @@ module.exports = function(grunt) {
       }
     },
 		watch: {
+			tpl: {
+				files: path.join(tplsFolder, "**", "*.tpl.html"),
+				tasks: ["html2js:main"]
+			},
       css: {
 				files: path.join(sassFolder, "site.scss"),
 				tasks: ["sass","cssmin","compress:css"]
@@ -126,6 +156,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-sass");
 	grunt.loadNpmTasks("grunt-contrib-compress");
 	grunt.loadNpmTasks("grunt-contrib-watch");
+	grunt.loadNpmTasks('grunt-html2js');
 
 	grunt.registerTask("web-server", function() {
 
@@ -167,6 +198,6 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask("default", "standard dev task",
-		["sass", "cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
+		["html2js", "sass", "cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
 
 };
