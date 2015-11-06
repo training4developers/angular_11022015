@@ -21,8 +21,19 @@
 			"use strict";
 
 			angular.module("MyApp", ['MyApp.Templates'])
-				.controller("MyCtrl", function($scope) {
+				.controller("MyCtrl", function($scope, $http) {
 					$scope.message = "Test Message!";
+
+					$http.get("http://localhost:8090/widgets").then(function(results) {
+						console.log("done");
+						console.log(results);
+					});
+
+					// $http.jsonp("http://localhost:8090/widgets?callback=JSON_CALLBACK").then(function(results) {
+					// 	console.log("done");
+					// 	console.log(results);
+					// });
+
 				});
 
 		</script>

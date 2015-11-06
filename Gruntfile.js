@@ -4,10 +4,11 @@ module.exports = function(grunt) {
 
 	var
 		path = require("path"),
-		wwwFolder = path.join("app", "www"),
+		wwwFolder = path.join(process.cwd(), "app", "www"),
+		assetsFolder = path.join(process.cwd(), "assets"),
 
-		tplsFolder = path.join("assets", "tpls"),
-		sassFolder = path.join("assets", "sass"),
+		tplsFolder = path.join(assetsFolder, "tpls"),
+		sassFolder = path.join(assetsFolder, "sass"),
 		cssFolder = path.join(wwwFolder, "css"),
 		cssMinFiles = {},
 		cssCompressFiles = {},
@@ -49,8 +50,37 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		webServer: {
 			port: 8080,
-			rootFolder: "app/www"
+			wwwFolder: wwwFolder,
+			defaultFile: path.join(wwwFolder, "index.html"),
+			staticFolders: [
+				{ url: "/libs", folder: "libs" },
+				{ url: "/tpl", folder: "tpl" },
+				{ url: "/js", folder: "js" },
+				{ url: "/css", folder: "css" }
+			]
 		},
+		restServer: {
+			port: 8090
+		},
+    mongoServer: {
+      host: "localhost",
+      port: 27017,
+      dbName: "AAA"
+    },
+    logger: {
+      transports: {
+        console: {
+          level: "debug",
+          colorize: true,
+          timeStamp: true
+        },
+        file: {
+          level: "debug",
+          fileName: path.join(process.cwd(), "logs", "app.log"),
+          timeStamp : true
+        }
+      }
+    },
 		html2js: {
     	main: {
 	    	options: {
@@ -158,46 +188,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks('grunt-html2js');
 
-	grunt.registerTask("web-server", function() {
+	grunt.registerTask("servers", function() {
 
-		const
-			http = require("http"),
-			express = require("express");
-
-		let
-			app = express(),
-			webServerConfig = grunt.config("webServer");
-
-		//this.async();
-
-		app.use("/css", express.static(cssFolder, {
-			setHeaders: function(res, filePath) {
-				res.setHeader("Content-Type", "text/css");
-				if (/.gz.css$/.test(filePath)) {
-					res.setHeader("Content-Encoding", "gzip");
-				}
-			}
-		}));
-
-		app.use("/js", express.static(jsFolder, {
-			setHeaders: function(res, filePath) {
-				res.setHeader("Content-Type", "text/javascript");
-				if (/.gz.js$/.test(filePath)) {
-					res.setHeader("Content-Encoding", "gzip");
-				}
-			}
-		}));
-
-		app.use(express.static(webServerConfig.rootFolder));
-
-		http.createServer(app).listen(webServerConfig.port, function() {
-			console.log("web server started on port " + webServerConfig.port);
-		});
-
+		require("./app/server")(grunt.config());
 
 	});
 
 	grunt.registerTask("default", "standard dev task",
-		["html2js", "sass", "cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "web-server", "watch"]);
+		["html2js", "sass", "cssmin", "compress:css", "uglify:combine", "uglify:minify", "compress:js", "servers", "watch"]);
 
 };
